@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Teks Anti Gagal</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
+        
+        #output { 
+            width: 100%; height: 300px; border: 1px solid #eee; border-radius: 8px; 
+            padding: 10px; margin-top: 20px; overflow-y: auto; background: #fafafa;
+            white-space: pre-wrap; font-size: 14px; color: #444; box-sizing: border-box;
+        }
+        
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        button { padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        
+        .btn-generate { background-color: #007bff; color: white; }
+        .btn-generate:hover { background-color: #0056b3; }
+        
+        .btn-copy { background-color: #28a745; color: white; }
+        .btn-copy:hover { background-color: #218838; }
+        
+        .status { text-align: center; font-size: 13px; margin-top: 10px; color: #28a745; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Text Generator Kata</h2>
+    
+    <div class="input-group">
+        <label>Kata/Kalimat:</label>
+        <input type="text" id="inputText" placeholder="Contoh: Farid Ganteng">
+    </div>
+    
+    <div class="input-group">
+        <label>Jumlah Ulangan:</label>
+        <input type="number" id="inputCount" value="20000">
+    </div>
+
+    <div class="input-group">
+        <label>Pemisah:</label>
+        <select id="separator">
+            <option value="\n">Baris Baru (Enter)</option>
+            <option value=" ">Spasi</option>
+            <option value=", ">Koma</option>
+        </select>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-generate" onclick="generateText()">Generate</button>
+        <button class="btn-copy" onclick="copyText()">Salin Semua</button>
+    </div>
+
+    <div id="status" class="status">Berhasil disalin! ✓</div>
+
+    <div id="output">Hasil akan muncul di sini...</div>
+</div>
+
+<script>
+    function generateText() {
+        const word = document.getElementById('inputText').value || "MAAF";
+        const count = parseInt(document.getElementById('inputCount').value);
+        const sepOption = document.getElementById('separator').value;
+        const sep = sepOption === "\\n" ? "\n" : sepOption;
+        const output = document.getElementById('output');
+        
+        if (isNaN(count) || count <= 0) {
+            alert("Masukkan jumlah angka yang valid!");
+            return;
+        }
+
+        output.innerText = "Sedang membuat teks...";
+
+        setTimeout(() => {
+            try {
+                const result = new Array(count).fill(word).join(sep);
+                output.innerText = result;
+            } catch (e) {
+                output.innerText = "Error: Jumlah terlalu besar!";
+            }
+        }, 50);
+        
+        document.getElementById('status').style.display = 'none';
+    }
+
+    function copyText() {
+        const output = document.getElementById('output');
+        const text = output.innerText;
+        
+        if (!text || text.startsWith("Hasil akan") || text.startsWith("Sedang")) return;
+
+        // Fungsi sukses
+        const showSuccess = () => {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            setTimeout(() => { status.style.display = 'none'; }, 2500);
+        };
+
+        // Cara 1: Menggunakan Clipboard API modern
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(showSuccess).catch(err => fallbackCopy(text, showSuccess));
+        } else {
+            // Cara 2: Fallback manual (Anti Gagal)
+            fallbackCopy(text, showSuccess);
+        }
+    }
+
+    function fallbackCopy(text, callback) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Pastikan tidak terlihat di layar
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) callback();
+        } catch (err) {
+            alert("Maaf, gagal menyalin secara otomatis. Silakan salin manual.");
+        }
+        
+        document.body.removeChild(textArea);
+    }
+</script>
+
+</body>
+</html>
