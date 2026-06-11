@@ -3,140 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Teks Anti Gagal</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h2 { text-align: center; color: #333; margin-top: 0; }
-        
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
-        
-        #output { 
-            width: 100%; height: 300px; border: 1px solid #eee; border-radius: 8px; 
-            padding: 10px; margin-top: 20px; overflow-y: auto; background: #fafafa;
-            white-space: pre-wrap; font-size: 14px; color: #444; box-sizing: border-box;
+    <title>Generator Teks Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'sans-serif'],
+                    },
+                }
+            }
         }
-        
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        button { padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        
-        .btn-generate { background-color: #007bff; color: white; }
-        .btn-generate:hover { background-color: #0056b3; }
-        
-        .btn-copy { background-color: #28a745; color: white; }
-        .btn-copy:hover { background-color: #218838; }
-        
-        .status { text-align: center; font-size: 13px; margin-top: 10px; color: #28a745; display: none; font-weight: bold; }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-shadow {
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+            }
+            .input-focus {
+                @apply focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all duration-200;
+            }
+            .btn-hover {
+                @apply transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0;
+            }
+            .scrollbar-custom::-webkit-scrollbar {
+                width: 8px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-track {
+                background: #f1f5f9;
+                border-radius: 8px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 8px;
+            }
+            .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 min-h-screen font-sans py-8 px-4">
+    <div class="max-w-xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-4">
+                <i class="fa fa-file-text-o text-3xl text-primary"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-dark mb-2">Generator Teks</h1>
+            <p class="text-slate-600 max-w-md mx-auto">Buat teks berulang dengan cepat dan mudah untuk kebutuhan Anda</p>
+        </div>
 
-<div class="card">
-    <h2>Text Generator Kata</h2>
-    
-    <div class="input-group">
-        <label>Kata/Kalimat:</label>
-        <input type="text" id="inputText" placeholder="Contoh: Farid Ganteng">
+        <!-- Main Card -->
+        <div class="bg-white rounded-3xl p-6 md:p-8 card-shadow">
+            <!-- Input Teks -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    <i class="fa fa-pencil mr-2 text-primary"></i>Kata atau Kalimat
+                </label>
+                <input 
+                    type="text" 
+                    id="inputText" 
+                    placeholder="Contoh: Terima Kasih / Nama Anda" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 input-focus"
+                >
+            </div>
+
+            <!-- Jumlah -->
+            <div class="mb-5">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    <i class="fa fa-sort-numeric-asc mr-2 text-primary"></i>Jumlah Pengulangan
+                </label>
+                <input 
+                    type="number" 
+                    id="inputCount" 
+                    value="20000" 
+                    min="1" 
+                    max="100000"
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 input-focus"
+                >
+                <p class="text-xs text-slate-500 mt-1">Maksimal 100.000 kali untuk performa terbaik</p>
+            </div>
+
+            <!-- Pemisah -->
+            <div class="mb-7">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    <i class="fa fa-arrows-h mr-2 text-primary"></i>Pemisah Teks
+                </label>
+                <select 
+                    id="separator" 
+                    class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 input-focus"
+                >
+                    <option value="\n">Baris Baru (Enter)</option>
+                    <option value=" ">Spasi</option>
+                    <option value=", ">Koma + Spasi</option>
+                    <option value=" | ">Garis Vertikal</option>
+                    <option value=";">Titik Koma</option>
+                </select>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button 
+                    onclick="generateText()" 
+                    class="btn-hover bg-primary hover:bg-primary/90 text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2"
+                >
+                    <i class="fa fa-magic"></i>
+                    <span>Buat Teks</span>
+                </button>
+
+                <button 
+                    onclick="copyText()" 
+                    class="btn-hover bg-secondary hover:bg-secondary/90 text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2"
+                >
+                    <i class="fa fa-copy"></i>
+                    <span>Salin Semua</span>
+                </button>
+            </div>
+
+            <!-- Status Pesan -->
+            <div id="status" class="hidden mb-4 p-3 rounded-xl text-center text-sm font-medium"></div>
+
+            <!-- Area Hasil -->
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-2">
+                    <i class="fa fa-eye mr-2 text-primary"></i>Hasil Teks
+                </label>
+                <div 
+                    id="output" 
+                    class="w-full h-72 p-4 border border-slate-200 rounded-xl bg-slate-50 text-slate-700 text-sm leading-relaxed overflow-y-auto scrollbar-custom"
+                >
+                    Hasil teks akan muncul di sini setelah Anda klik tombol "Buat Teks"
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8 text-slate-500 text-sm">
+            <p>Generator Teks Profesional &copy; 2026</p>
+        </div>
     </div>
-    
-    <div class="input-group">
-        <label>Jumlah Ulangan:</label>
-        <input type="number" id="inputCount" value="20000">
-    </div>
 
-    <div class="input-group">
-        <label>Pemisah:</label>
-        <select id="separator">
-            <option value="\n">Baris Baru (Enter)</option>
-            <option value=" ">Spasi</option>
-            <option value=", ">Koma</option>
-        </select>
-    </div>
-
-    <div class="btn-group">
-        <button class="btn-generate" onclick="generateText()">Generate</button>
-        <button class="btn-copy" onclick="copyText()">Salin Semua</button>
-    </div>
-
-    <div id="status" class="status">Berhasil disalin! ✓</div>
-
-    <div id="output">Hasil akan muncul di sini...</div>
-</div>
-
-<script>
-    function generateText() {
-        const word = document.getElementById('inputText').value || "MAAF";
-        const count = parseInt(document.getElementById('inputCount').value);
-        const sepOption = document.getElementById('separator').value;
-        const sep = sepOption === "\\n" ? "\n" : sepOption;
-        const output = document.getElementById('output');
-        
-        if (isNaN(count) || count <= 0) {
-            alert("Masukkan jumlah angka yang valid!");
-            return;
-        }
-
-        output.innerText = "Sedang membuat teks...";
-
-        setTimeout(() => {
-            try {
-                const result = new Array(count).fill(word).join(sep);
-                output.innerText = result;
-            } catch (e) {
-                output.innerText = "Error: Jumlah terlalu besar!";
-            }
-        }, 50);
-        
-        document.getElementById('status').style.display = 'none';
-    }
-
-    function copyText() {
-        const output = document.getElementById('output');
-        const text = output.innerText;
-        
-        if (!text || text.startsWith("Hasil akan") || text.startsWith("Sedang")) return;
-
-        // Fungsi sukses
-        const showSuccess = () => {
+    <script>
+        function generateText() {
+            const word = document.getElementById('inputText').value.trim() || "MAAF";
+            const count = parseInt(document.getElementById('inputCount').value);
+            const sepOption = document.getElementById('separator').value;
+            const sep = sepOption === "\\n" ? "\n" : sepOption;
+            const output = document.getElementById('output');
             const status = document.getElementById('status');
-            status.style.display = 'block';
-            setTimeout(() => { status.style.display = 'none'; }, 2500);
-        };
+            
+            // Reset status
+            status.className = 'hidden mb-4 p-3 rounded-xl text-center text-sm font-medium';
+            status.textContent = '';
 
-        // Cara 1: Menggunakan Clipboard API modern
-        if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(text).then(showSuccess).catch(err => fallbackCopy(text, showSuccess));
-        } else {
-            // Cara 2: Fallback manual (Anti Gagal)
-            fallbackCopy(text, showSuccess);
+            // Validasi input
+            if (isNaN(count) || count <= 0) {
+                showStatus('Masukkan jumlah yang valid!', 'bg-red-50 text-red-600 border border-red-100');
+                return;
+            }
+
+            if (count > 100000) {
+                showStatus('Jumlah maksimal 100.000 untuk menghindari gangguan!', 'bg-amber-50 text-amber-600 border border-amber-100');
+                return;
+            }
+
+            output.innerText = "⏳ Sedang memproses teks... Mohon tunggu sebentar";
+
+            setTimeout(() => {
+                try {
+                    const result = new Array(count).fill(word).join(sep);
+                    output.innerText = result;
+                    showStatus(`✅ Berhasil dibuat! Total ${count} kata`, 'bg-green-50 text-green-600 border border-green-100');
+                } catch (e) {
+                    output.innerText = "❌ Gagal membuat teks. Jumlah terlalu besar atau perangkat tidak cukup memori.";
+                    showStatus('Terjadi kesalahan!', 'bg-red-50 text-red-600 border border-red-100');
+                }
+            }, 100);
         }
-    }
 
-    function fallbackCopy(text, callback) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        
-        // Pastikan tidak terlihat di layar
-        textArea.style.position = "fixed";
-        textArea.style.left = "-9999px";
-        textArea.style.top = "0";
-        document.body.appendChild(textArea);
-        
-        textArea.focus();
-        textArea.select();
-        
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) callback();
-        } catch (err) {
-            alert("Maaf, gagal menyalin secara otomatis. Silakan salin manual.");
+        function copyText() {
+            const output = document.getElementById('output');
+            const text = output.innerText;
+            
+            if (!text || text.startsWith("Hasil") || text.startsWith("⏳") || text.startsWith("❌")) {
+                showStatus('Tidak ada teks untuk disalin!', 'bg-amber-50 text-amber-600 border border-amber-100');
+                return;
+            }
+
+            // Fungsi tampil pesan sukses
+            const success = () => {
+                showStatus('✅ Teks berhasil disalin ke papan klip!', 'bg-green-50 text-green-600 border border-green-100');
+            };
+
+            // Cara modern
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(success)
+                    .catch(() => fallbackCopy(text, success));
+            } else {
+                fallbackCopy(text, success);
+            }
         }
-        
-        document.body.removeChild(textArea);
-    }
-</script>
 
+        function fallbackCopy(text, callback) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const done = document.execCommand('copy');
+                if (done) callback();
+                else throw new Error('Gagal');
+            } catch (err) {
+                showStatus('⚠️ Gagal menyalin otomatis. Silakan pilih dan salin teks secara manual.', 'bg-blue-50 text-blue-600 border border-blue-100');
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showStatus(message, styleClass) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `mb-4 p-3 rounded-xl text-center text-sm font-medium ${styleClass}`;
+            status.classList.remove('hidden');
+            
+            setTimeout(() => {
+                status.classList.add('hidden');
+            }, 3500);
+        }
+    </script>
 </body>
 </html>
+
